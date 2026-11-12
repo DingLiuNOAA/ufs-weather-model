@@ -18,9 +18,9 @@ jobs:
         app: ["ATM", "S2SW", "HAFS-MOM6W"]
         compiler:
           - name: "gcc"
-            container: "ghcr.io/noaa-emc/ci-common-build-cache/ufs-weather-model-ubuntu-24.04-gcc-13-mpich-x@sha256:cc9bdafb43d31498fe833c1914d90e32570f8fa9f001e11ca16c4a88417128f8"
+            container: "ghcr.io/noaa-emc/ci-common-build-cache/ufs-weather-model-ubuntu-24.04-gcc-13-mpich-x@sha256:2dcb6aaaa605e00c0cb7357d322d0348c701d74cce327ac949748730b58ef51f"
           - name: "oneapi"
-            container: "ghcr.io/noaa-emc/ci-common-build-cache/ufs-weather-model-ubuntu-24.04-oneapi-2025.3-intel-oneapi-mpi-2021.17@sha256:a8d5845388f64ed95ad19583b03536b68c48c2c2d8166f66269fac92fd2a0751"
+            container: "ghcr.io/noaa-emc/ci-common-build-cache/ufs-weather-model-ubuntu-24.04-oneapi-2025.3-intel-oneapi-mpi-2021.17@sha256:b9686ef67c3e334cc08eb96d7db46e98ab731f75c0d24353981c1beb143b6e71"
         include:
           - app: ATM # cover RRFS
             ccpp_suites: "FV3_RAP,FV3_RAP_sfcdiff,FV3_HRRR,FV3_RRFS_v1beta,FV3_RRFS_v1nssl"
@@ -41,14 +41,14 @@ jobs:
     steps:
 
     - name: "Checkout"
-      uses: actions/checkout@v7.0.1
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
       with:
         submodules: recursive
         path: ufs-weather-model
 
     - name: "Install Intel compilers & MPI"
       if: matrix.compiler.name == 'oneapi'
-      uses: NOAA-EMC/ci-install-intel-toolkit@develop
+      uses: NOAA-EMC/ci-install-intel-toolkit@28a31cb26634b85acbc23375fdce5cc2025c5747 # HEAD of develop as of 8/25/2026
       with:
         install-classic: false
         oneapi-version: 2025.3
@@ -101,7 +101,7 @@ jobs:
         cmake --build build --parallel 4 2>&1 | tee build-logs/build-out-${{ matrix.app }}-${{ matrix.compiler.name }}.txt
     - name: "Upload Build Logs"
       if: always() # Run this even if the build fails
-      uses: actions/upload-artifact@v7.0.1
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #v7.0.1
       with:
         name: build-logs-${{ matrix.app }}-${{ matrix.compiler.name }}
         path: build-logs/build-out-*.txt
@@ -120,12 +120,12 @@ jobs:
       
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
         with:
           fetch-depth: 0 
           
       - name: Download Build Logs
-        uses: actions/download-artifact@v8.0.1
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c #v8.0.1
         with:
           pattern: build-logs-*
           path: ./build-logs
@@ -146,7 +146,7 @@ jobs:
 
       - name: Upload Warnings Report
         if: always()
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #v7.0.1
         with:
           name: report-compiler-warnings
           path: all_compiler_warnings.txt
