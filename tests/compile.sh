@@ -67,6 +67,8 @@ case ${MACHINE_ID} in
     fi
     if [[ ${MACHINE_ID} == gaeac6 ]]; then
       module reset
+    elif [[ ${MACHINE_ID} == gaeac7 ]]; then
+      module reset
     elif [[ ${MACHINE_ID} == container ]]; then
       # shellcheck disable=SC1091
       source /usr/lmod/lmod/init/bash
