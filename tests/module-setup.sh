@@ -61,6 +61,11 @@ elif [[ ${MACHINE_ID} = gaeac6 ]]; then
         source /opt/cray/pe/lmod/lmod/init/bash
     fi
     module reset
+elif [[ ${MACHINE_ID} = gaeac7 ]]; then
+    if ( ! eval module help > /dev/null 2>&1 ) ; then
+        source /opt/cray/pe/lmod/lmod/init/bash
+    fi
+    module reset
 
 elif [[ ${MACHINE_ID} = container ]] ; then
     # We are in a container
